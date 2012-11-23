@@ -29,6 +29,10 @@
         <activity android:name=".Event" />
         <activity android:name=".Contact" />
         <activity android:name=".Set" />
+        
+        <receiver  android:process=":remote" android:name="Receiver" />
+        
+        
     </application>
 
 </manifest>

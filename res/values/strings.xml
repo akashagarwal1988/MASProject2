@@ -4,7 +4,9 @@
     <string name="hello_world">Hello world!</string>
     <string name="menu_settings">Settings</string>
     <string name="title_activity_main">Main</string>
-    <string name="event_xml_button">OK</string>
+    <string name="event_xml_button">Contact List</string>
+    <string name="main_password">password</string>
+    
     
 
 </resources>
