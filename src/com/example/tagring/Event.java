@@ -2,9 +2,13 @@ package com.example.tagring;
 
 import java.io.IOException;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
+import com.google.gdata.client.calendar.CalendarQuery;
 import com.google.gdata.client.calendar.CalendarService;
+import com.google.gdata.data.DateTime;
 import com.google.gdata.data.calendar.CalendarEntry;
 import com.google.gdata.data.calendar.CalendarEventEntry;
 import com.google.gdata.data.calendar.CalendarEventFeed;
@@ -23,9 +27,8 @@ import android.widget.ListView;
 
 public class Event extends ListActivity {
 	@SuppressWarnings("unchecked")
-	
-	
 	ArrayList<String> events;
+
 	@SuppressWarnings("unchecked")
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -46,18 +49,25 @@ public class Event extends ListActivity {
 		try {
 			feedUrl = new URL(
 					"http://www.google.com/calendar/feeds/test.appsolute1@gmail.com/private/full");
+			CalendarQuery myQuery = new CalendarQuery(feedUrl);
 
-			CalendarEventFeed myFeed = myService.getFeed(feedUrl,
+			// Resolve Recurring Events to single events
+			myQuery.setStringCustomParameter("singleevents", "true");
+
+			// Order by start Time ascending
+			myQuery.setStringCustomParameter("orderby", "starttime");
+			myQuery.setStringCustomParameter("sortorder", "ascending");
+
+			// Events in the future
+			myQuery.setMinimumStartTime(DateTime.now());
+
+			CalendarEventFeed myFeed = myService.getFeed(myQuery,
 					CalendarEventFeed.class);
 
-			System.out.println("Your calendars:");
-			System.out.println();
-			
 			events = new ArrayList<String>();
-			
+
 			setListAdapter(new ArrayAdapter<String>(this,
-					android.R.layout.simple_list_item_1,
-					events));
+					android.R.layout.simple_list_item_1, events));
 			for (int i = 0; i < myFeed.getEntries().size(); i++) {
 				CalendarEventEntry calendarEvent = myFeed.getEntries().get(i);
 				String newItem = calendarEvent.getTitle().getPlainText();
@@ -88,6 +98,5 @@ public class Event extends ListActivity {
 			}
 		});
 	}
-	
-	
+
 }
